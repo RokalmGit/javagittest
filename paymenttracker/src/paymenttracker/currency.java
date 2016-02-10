@@ -1,6 +1,8 @@
 package paymenttracker;
 
-public class currency{
+import javax.swing.JOptionPane;
+
+public class currency {
 
     private String currencyName;
     private double currencyValue = 0;
@@ -19,7 +21,11 @@ public class currency{
     }
 
     public void setCurrencyValue(double currencyValue) {
-        this.currencyValue = this.currencyValue + currencyValue;
+        if (this.currencyValue + currencyValue < 0) {
+            JOptionPane.showMessageDialog(null, "Insufficient amount: " + this.getCurrencyName() + " " + (this.currencyValue + currencyValue));
+        } else {
+            this.currencyValue = this.currencyValue + currencyValue;
+        }
     }
 
     public double getConversionRatio() {
