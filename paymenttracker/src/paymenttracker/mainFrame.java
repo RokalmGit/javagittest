@@ -66,6 +66,7 @@ public class mainFrame extends javax.swing.JFrame {
                         break;
                     } else {
                         //do nothing
+                        
                     }
                     if (x == currencies.size() - 1) {
                         currencies.add(currencyObject);
