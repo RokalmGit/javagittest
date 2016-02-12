@@ -11,13 +11,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class mainFrame extends javax.swing.JFrame {
-
+    // Currency objects are held inside a "currency" ArrayList. at the beginning of the program,
+    // there is only one object with null values in it.
     private final ArrayList<currency> currencies = new ArrayList();
 
     public mainFrame() {
         initComponents();
         this.setLocationRelativeTo(null);
         this.setThreads();
+        
         currency currencyObjectTemp = new currency();
         currencyObjectTemp.setCurrencyName(null);
         currencies.add(currencyObjectTemp);
@@ -25,6 +27,7 @@ public class mainFrame extends javax.swing.JFrame {
     }
 
     public final void setThreads() {
+        // a thread to run the print method in intervals.
         Thread t;
         t = new Thread() {
             @Override
@@ -44,18 +47,26 @@ public class mainFrame extends javax.swing.JFrame {
 
     public synchronized void performCurrencyActions() {
         try {
-            String[] currencyListArray = input.getText().split("\\n");
+            // Receive the input and split the lines
+            String[] currencyListArray = input.getText().toUpperCase().split("\\n");
             for (String currency : currencyListArray) {
                 if (currency.equals("quit")){
                     System.exit(1);
                 }
+                // Create a new currency object.
                 currency currencyObject = new currency();
+                // seperate the currency name and value
                 String[] temp = currency.split(" ");
+                
                 for (int x = 0; x < currencies.size(); x++) {
+                    // catch the invalid currency entry
                     if(temp[0].length() > 3 || temp[0].length() < 3){
                         JOptionPane.showMessageDialog(null,"Currency must have 3 letters.");
                         break;
                     }
+                    // the following if-elseif-else block checks if the currency exists in the arraylist.
+                    // if it doesn't or if it exists but its properties are null, the currency object
+                    // is added to the array. Else, the currency object's properties are updated.
                     if (currencies.get(x).getCurrencyName() == null) {
                         currencies.get(x).setCurrencyName(temp[0].toUpperCase());
                         currencies.get(x).setCurrencyValue(Double.parseDouble(temp[1]));
@@ -68,6 +79,7 @@ public class mainFrame extends javax.swing.JFrame {
                         //do nothing
                         
                     }
+                    // if the object doesn't exist, add it to the end of the array.
                     if (x == currencies.size() - 1) {
                         currencies.add(currencyObject);
                     }
@@ -93,6 +105,7 @@ public class mainFrame extends javax.swing.JFrame {
     }
 
     public void performRatioActions() {
+        // set the  USD exchange rate for the currency that is selected in the combobox.
         for (int x = 0; x < currencies.size(); x++) {
             if (currencies.get(x).getCurrencyName().equals(currencyList.getSelectedItem().toString())) {
                 currencies.get(x).setConversionRatio(Double.parseDouble(conversionRate.getText()));
@@ -151,7 +164,7 @@ public class mainFrame extends javax.swing.JFrame {
         input.setRows(5);
         jScrollPane2.setViewportView(input);
 
-        addFromConsole.setText("ADD FROM CONSOLE");
+        addFromConsole.setText("ENTER");
         addFromConsole.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFromConsoleActionPerformed(evt);
@@ -174,7 +187,7 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("INPUT");
 
-        addFromFile.setText("ADD FROM FILE");
+        addFromFile.setText("READ FROM FILE");
         addFromFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addFromFileActionPerformed(evt);
@@ -186,7 +199,7 @@ public class mainFrame extends javax.swing.JFrame {
         jLabel2.setText("OUTPUT");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel3.setText("/USD:");
+        jLabel3.setText("/ USD:");
 
         jMenu1.setText("Program");
 
